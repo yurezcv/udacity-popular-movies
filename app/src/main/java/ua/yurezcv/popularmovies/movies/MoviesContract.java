@@ -13,6 +13,8 @@ public interface MoviesContract {
         void setProgressIndicator(boolean active);
 
         void showMovies(List<Movie> movies);
+
+        void showError(String errorMessage);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -20,5 +22,11 @@ public interface MoviesContract {
         void takeView(MoviesContract.View moviesActivityView);
 
         void dropView();
+
+        void onResume();
+
+        void loadMovies(MoviesFilterType moviesFilterType);
+
+        void onMovieSelected(int position);
     }
 }

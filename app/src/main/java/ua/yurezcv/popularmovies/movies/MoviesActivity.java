@@ -1,34 +1,32 @@
 package ua.yurezcv.popularmovies.movies;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
-import java.util.List;
-
-import ua.yurezcv.popularmovies.BuildConfig;
 import ua.yurezcv.popularmovies.R;
-import ua.yurezcv.popularmovies.data.model.Movie;
 
-public class MoviesActivity extends AppCompatActivity implements MoviesContract.View {
+public class MoviesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String apiKey = BuildConfig.API_KEY;
+        int fragmentLayoutId = R.id.movies_fragment_container;
 
-        Log.d("API_KEY", apiKey);
-    }
+        MoviesFragment moviesFragment =
+                (MoviesFragment) getSupportFragmentManager().findFragmentById(fragmentLayoutId);
 
-    @Override
-    public void setProgressIndicator(boolean active) {
-
-    }
-
-    @Override
-    public void showMovies(List<Movie> movies) {
-
+        // check if fragment exists, init otherwise
+        if (moviesFragment == null) {
+            // init the movies fragment with 2 columns
+            moviesFragment = MoviesFragment.newInstance(2);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(fragmentLayoutId, moviesFragment);
+            transaction.commit();
+        }
     }
 }

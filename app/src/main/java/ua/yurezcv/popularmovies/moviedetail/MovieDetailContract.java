@@ -7,9 +7,6 @@ import ua.yurezcv.popularmovies.data.model.Movie;
 public interface MovieDetailContract {
 
     interface View extends BaseView<MovieDetailContract.Presenter> {
-
-        void setProgressIndicator(boolean active);
-
         void showMovieDetail(Movie movie);
     }
 
@@ -18,5 +15,7 @@ public interface MovieDetailContract {
         void takeView(MovieDetailContract.View movieDetailContractView);
 
         void dropView();
+
+        void getSelectedMovie();
     }
 }
