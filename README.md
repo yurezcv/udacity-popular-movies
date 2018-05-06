@@ -15,5 +15,5 @@ My attempt on developing the project by using Clean Architecture principles and 
 A lot of inspiration was taken from Google Samples of [Android Architecture Blueprints](https://github.com/googlesamples/android-architecture/tree/todo-mvp-clean/)
 
 ## App Screenshots
-![Movies Grid](https://www.dropbox.com/s/lj8zxmuytlhhld6/MoviesGrid.png "Movies Activity")
-![Movie Detail](https://www.dropbox.com/s/hh0mok3odi1gm6d/MovieDetail.png "Movie Detail Activity")
+![Movies Grid](https://www.dropbox.com/s/lj8zxmuytlhhld6/MoviesGrid.png?raw=1 "Movies Activity")
+![Movie Detail](https://www.dropbox.com/s/hh0mok3odi1gm6d/MovieDetail.png?raw=1 "Movie Detail Activity")
