@@ -27,6 +27,8 @@ public interface MoviesContract {
 
         void loadMovies(MoviesFilterType moviesFilterType);
 
+        void loadMoviesFromPage(int page);
+
         void onMovieSelected(int position);
     }
 }

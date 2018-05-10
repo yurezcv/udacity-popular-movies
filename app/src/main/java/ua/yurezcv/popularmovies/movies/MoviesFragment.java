@@ -99,15 +99,13 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
             mMoviesGridRecycleView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
-        // Retain an instance so that you can call `resetState()` for fresh searches
+        // init onScrollListener for pagination loading in the movies grid
         mScrollListener = new EndlessRecyclerViewScrollListener((GridLayoutManager) mMoviesGridRecycleView.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                // mPresenter.loadMovies();
-                // loadNextDataFromApi(page);
-                Log.d("MoviesFragment", "onLoadMore in RecyclerView");
+                // API page count starts from 1, EndlessRecyclerViewScrollListener counts from 0
+                // that's why we need to add +1 to the page value
+                mPresenter.loadMoviesFromPage(page+1);
             }
         };
         // Adds the scroll listener to RecyclerView
@@ -125,14 +123,17 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
         switch (item.getItemId()) {
             case R.id.menu_most_popular:
                 // show most popular movies
+                clearAdapterData();
                 mPresenter.loadMovies(MoviesFilterType.POPULAR_MOVIES);
                 break;
             case R.id.menu_highest_rated:
                 // show highest rated movies
+                clearAdapterData();
                 mPresenter.loadMovies(MoviesFilterType.HIGHEST_RATED_MOVIES);
                 break;
             case R.id.menu_favorites:
                 // show user's favorite movies
+                clearAdapterData();
                 mPresenter.loadMovies(MoviesFilterType.FAVORITES);
                 break;
         }
@@ -156,8 +157,16 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
     }
 
     @Override
-    public void showMovies(List<Movie> movies) {
-        mMoviesGridAdapter.setData(movies);
+    public void showMovies(final List<Movie> movies) {
+        final int currentSize = mMoviesGridAdapter.getItemCount();
+
+        mMoviesGridRecycleView.post(new Runnable() {
+            @Override
+            public void run() {
+                mMoviesGridAdapter.setData(movies);
+                mMoviesGridAdapter.notifyItemRangeInserted(currentSize, movies.size() - 1);
+            }
+        });
     }
 
     @Override
@@ -166,6 +175,7 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
         mMoviesGridRecycleView.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.INVISIBLE);
         mErrorTextView.setVisibility(View.VISIBLE);
+        mScrollListener.resetState();
     }
 
     @Override
@@ -173,5 +183,11 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
         mPresenter.onMovieSelected(position);
         Intent movieDetailIntent = new Intent(getActivity(), MovieDetail.class);
         startActivity(movieDetailIntent);
+    }
+
+    /* Simple method to clear adapter data when a user changes the filter setting */
+    private void clearAdapterData() {
+        mScrollListener.resetState();
+        mMoviesGridAdapter.clearData();
     }
 }

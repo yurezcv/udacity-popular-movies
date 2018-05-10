@@ -38,18 +38,23 @@ public class DataRepository implements DataSourceContact {
         return instance;
     }
 
-
     @Override
     public void loadMovies(MoviesFilterType filterType, final LoadMoviesCallback callback) {
+        // clear cache for an initial movie load
+        mMoviesCache.clear();
+        loadMovies(filterType, INITIAL_LOAD_PAGE, callback);
+    }
 
-        if(filterType == mLastFilterType && !mMoviesCache.isEmpty()) {
+    @Override
+    public void loadMovies(MoviesFilterType filterType, int page, final LoadMoviesCallback callback) {
+        if(filterType == mLastFilterType && !mMoviesCache.isEmpty() && page == INITIAL_LOAD_PAGE) {
             callback.onSuccess(mMoviesCache);
         } else {
             mLastFilterType = filterType;
-            mRemoteDataSource.loadMovies(filterType, new LoadMoviesCallback() {
+            mRemoteDataSource.loadMovies(filterType, page, new LoadMoviesCallback() {
                 @Override
                 public void onSuccess(List<Movie> movies) {
-                    mMoviesCache = movies;
+                    mMoviesCache.addAll(movies);
                     callback.onSuccess(movies);
                 }
 

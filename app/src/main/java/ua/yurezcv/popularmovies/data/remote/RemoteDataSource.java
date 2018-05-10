@@ -25,14 +25,19 @@ public class RemoteDataSource implements DataSourceContact {
     }
 
     @Override
-    public void loadMovies(MoviesFilterType filterType, final LoadMoviesCallback callback) {
+    public void loadMovies(MoviesFilterType filterType, LoadMoviesCallback callback) {
+        loadMovies(filterType, INITIAL_LOAD_PAGE, callback);
+    }
+
+    @Override
+    public void loadMovies(MoviesFilterType filterType, int page, final LoadMoviesCallback callback) {
         Call<MoviesResult> call = null;
         switch (filterType) {
             case POPULAR_MOVIES:
-                call = mMoviesAPI.getPopularMovies(DEFAULT_PAGE);
+                call = mMoviesAPI.getPopularMovies(page);
                 break;
             case HIGHEST_RATED_MOVIES:
-                call = mMoviesAPI.getHighestRatedMovies(DEFAULT_PAGE);
+                call = mMoviesAPI.getHighestRatedMovies(page);
                 break;
         }
 

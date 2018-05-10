@@ -90,9 +90,12 @@ public class MoviesGridRecyclerViewAdapter extends RecyclerView.Adapter<MoviesGr
 
     public void setData(List<Movie> movieList) {
         if(movieList != null) {
-            mMoviesList = movieList;
+            mMoviesList.addAll(movieList);
         }
+    }
 
+    public void clearData() {
+        mMoviesList.clear();
         notifyDataSetChanged();
     }
 }

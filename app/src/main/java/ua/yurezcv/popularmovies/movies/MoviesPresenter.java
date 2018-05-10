@@ -66,6 +66,25 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     }
 
     @Override
+    public void loadMoviesFromPage(int page) {
+
+        // mView.setProgressIndicator(true);
+
+        mDataRepository.loadMovies(mCurrentFilterSelection, page, new DataSourceContact.LoadMoviesCallback() {
+            @Override
+            public void onSuccess(List<Movie> movies) {
+                mView.showMovies(movies);
+                // mView.setProgressIndicator(false);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                mView.showError(throwable.getMessage());
+            }
+        });
+    }
+
+    @Override
     public void onMovieSelected(int position) {
         mDataRepository.setSelectedPosition(position);
     }

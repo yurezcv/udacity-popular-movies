@@ -10,6 +10,8 @@ import ua.yurezcv.popularmovies.movies.MoviesFilterType;
 
 public interface DataSourceContact {
 
+    int INITIAL_LOAD_PAGE = 1;
+
     interface LoadMoviesCallback {
         void onSuccess(List<Movie> movies);
         void onFailure(Throwable throwable);
@@ -26,6 +28,8 @@ public interface DataSourceContact {
     }
 
     void loadMovies(MoviesFilterType filterType, LoadMoviesCallback callback);
+
+    void loadMovies(MoviesFilterType filterType, int page, LoadMoviesCallback callback);
 
     void loadMovieTrailers(long movieId, LoadTrailersCallback callback);
 

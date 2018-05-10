@@ -9,6 +9,7 @@ My attempt on developing the project by using Clean Architecture principles and 
 * [gson](https://github.com/google/gson) - A Java serialization/deserialization library to convert Java Objects into JSON and back
 * [OkHttp](https://square.github.io/okhttp/) - An HTTP & HTTP/2 client for Android and Java applications
 * [Retrofit](https://square.github.io/retrofit/) - A type-safe HTTP client for Android and Java
+* [EndlessRecyclerViewScrollListener](https://gist.github.com/nesquena/d09dc68ff07e845cc622) - Endless RecyclerView scrolling for different layout managers
 
 ## Acknowledgments
 

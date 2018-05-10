@@ -84,5 +84,31 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
         Picasso.get()
                 .load(fullImgUrl)
                 .into(mPosterImageView);
+
+        // Log.d("MOVIE_DETAIL", "movieId = " + String.valueOf(movie.getId()));
+
+/*        DataRepository.getInstance().loadMovieTrailers(movie.getId(), new DataSourceContact.LoadTrailersCallback() {
+            @Override
+            public void onSuccess(List<Trailer> trailers) {
+                Log.d("MAIN_ACTIVITY", trailers.toString());
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Log.e("MAIN_ACTIVITY", throwable.getMessage());
+            }
+        });
+
+        DataRepository.getInstance().loadMovieReviews(movie.getId(), new DataSourceContact.LoadReviewsCallback() {
+            @Override
+            public void onSuccess(List<Review> reviews) {
+                Log.d("MAIN_ACTIVITY", reviews.toString());
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Log.e("MAIN_ACTIVITY", throwable.getMessage());
+            }
+        });*/
     }
 }
