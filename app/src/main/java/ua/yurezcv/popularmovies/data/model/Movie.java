@@ -26,6 +26,9 @@ public class Movie implements Parcelable {
     @SerializedName("poster_path")
     private String posterPath;
 
+    @SerializedName("backdrop_path")
+    private String backdropPath;
+
     @SerializedName("vote_average")
     private float voteAverage;
 
@@ -126,4 +129,12 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
 }

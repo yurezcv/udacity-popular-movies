@@ -3,6 +3,7 @@ package ua.yurezcv.popularmovies.moviedetail;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -11,9 +12,14 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
+import java.util.List;
 
 import ua.yurezcv.popularmovies.R;
+import ua.yurezcv.popularmovies.data.DataRepository;
+import ua.yurezcv.popularmovies.data.DataSourceContact;
 import ua.yurezcv.popularmovies.data.model.Movie;
+import ua.yurezcv.popularmovies.data.model.Review;
+import ua.yurezcv.popularmovies.data.model.Trailer;
 import ua.yurezcv.popularmovies.utils.Utils;
 
 public class MovieDetail extends AppCompatActivity implements MovieDetailContract.View {
@@ -72,13 +78,11 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
             e.printStackTrace();
         }
 
-        String posterPath = movie.getPosterPath();
+        String posterPath = movie.getBackdropPath();
         String fullImgUrl = Utils.createLargePosterUrl(posterPath);
 
         Picasso.get()
                 .load(fullImgUrl)
-                .resize(420, 350)
-                .centerCrop(Gravity.TOP)
                 .into(mPosterImageView);
     }
 }

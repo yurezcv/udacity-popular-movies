@@ -1,5 +1,8 @@
 package ua.yurezcv.popularmovies.data.remote;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 
 import okhttp3.HttpUrl;

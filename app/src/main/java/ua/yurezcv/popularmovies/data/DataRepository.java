@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ua.yurezcv.popularmovies.data.model.Movie;
+import ua.yurezcv.popularmovies.data.model.Review;
+import ua.yurezcv.popularmovies.data.model.Trailer;
 import ua.yurezcv.popularmovies.data.remote.RemoteDataSource;
 import ua.yurezcv.popularmovies.movies.MoviesFilterType;
 
@@ -57,6 +59,36 @@ public class DataRepository implements DataSourceContact {
                 }
             });
         }
+    }
+
+    @Override
+    public void loadMovieTrailers(long movieId, final LoadTrailersCallback callback) {
+        mRemoteDataSource.loadMovieTrailers(movieId, new LoadTrailersCallback() {
+            @Override
+            public void onSuccess(List<Trailer> trailers) {
+                callback.onSuccess(trailers);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                callback.onFailure(throwable);
+            }
+        });
+    }
+
+    @Override
+    public void loadMovieReviews(long movieId, final LoadReviewsCallback callback) {
+        mRemoteDataSource.loadMovieReviews(movieId, new LoadReviewsCallback() {
+            @Override
+            public void onSuccess(List<Review> reviews) {
+                callback.onSuccess(reviews);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                callback.onFailure(throwable);
+            }
+        });
     }
 
     public void setSelectedPosition(int position) {

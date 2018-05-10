@@ -9,7 +9,7 @@ public class Utils {
 
     private static final String BASE_IMG_URL = "http://image.tmdb.org/t/p/";
     private static final String POSTER_IMG_SIZE = "w185/";
-    private static final String POSTER_IMG_SIZE_LARGE = "w780/";
+    private static final String POSTER_IMG_SIZE_LARGE = "w500/";
 
     public static String createPosterUrl(String poster) {
         return BASE_IMG_URL + POSTER_IMG_SIZE + poster;

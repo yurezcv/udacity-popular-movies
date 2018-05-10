@@ -2,6 +2,8 @@
     <string name="app_name">Popular Movies</string>
     <string name="title_activity_movie_detail">MovieDetail</string>
 
+    <string name="content_authority">ua.yurezcv.popularmovies</string>
+
     <!-- Menus Related Strings -->
     <string name="menu_filter_most_popular">Most Popular</string>
     <string name="menu_filter_highest_rated">Highest Rated</string>
@@ -9,4 +11,5 @@
     <string name="content_desc_iv_movie_poster">Movie Poster for %1$s</string>
     <string name="content_desc_iv_movie_poster_default">Movie Poster</string>
     <string name="label_overview">Overview</string>
+    <string name="menu_filter_favorites">Favorites</string>
 </resources>

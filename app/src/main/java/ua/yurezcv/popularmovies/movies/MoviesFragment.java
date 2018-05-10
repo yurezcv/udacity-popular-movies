@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import ua.yurezcv.popularmovies.R;
 import ua.yurezcv.popularmovies.data.model.Movie;
 import ua.yurezcv.popularmovies.moviedetail.MovieDetail;
+import ua.yurezcv.popularmovies.utils.EndlessRecyclerViewScrollListener;
 
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
     private MoviesPresenter mPresenter;
 
     private MoviesGridRecyclerViewAdapter mMoviesGridAdapter;
+    private EndlessRecyclerViewScrollListener mScrollListener;
 
     public MoviesFragment() {
     }
@@ -95,6 +98,21 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
         } else {
             mMoviesGridRecycleView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
+
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        mScrollListener = new EndlessRecyclerViewScrollListener((GridLayoutManager) mMoviesGridRecycleView.getLayoutManager()) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                // mPresenter.loadMovies();
+                // loadNextDataFromApi(page);
+                Log.d("MoviesFragment", "onLoadMore in RecyclerView");
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        mMoviesGridRecycleView.addOnScrollListener(mScrollListener);
+
         mMoviesGridRecycleView.setAdapter(mMoviesGridAdapter);
 
         setHasOptionsMenu(true);
@@ -112,6 +130,10 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
             case R.id.menu_highest_rated:
                 // show highest rated movies
                 mPresenter.loadMovies(MoviesFilterType.HIGHEST_RATED_MOVIES);
+                break;
+            case R.id.menu_favorites:
+                // show user's favorite movies
+                mPresenter.loadMovies(MoviesFilterType.FAVORITES);
                 break;
         }
         return true;
@@ -142,6 +164,7 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
     public void showError(String errorMessage) {
         mErrorTextView.setText(errorMessage);
         mMoviesGridRecycleView.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
         mErrorTextView.setVisibility(View.VISIBLE);
     }
 

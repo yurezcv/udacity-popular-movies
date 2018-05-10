@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/iv_detail_poster"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="203dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/content_desc_iv_movie_poster_default"
             android:scaleType="fitCenter" />
