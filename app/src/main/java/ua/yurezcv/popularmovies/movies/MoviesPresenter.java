@@ -12,7 +12,7 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     private MoviesContract.View mView;
 
-    private MoviesFilterType mCurrentFilterSelection;
+    private int mCurrentFilterSelection;
 
     private boolean isFirstLoad = true;
 
@@ -34,13 +34,13 @@ public class MoviesPresenter implements MoviesContract.Presenter {
     public void onResume() {
         // set popular movies as default for the first loading
         if(isFirstLoad) {
-            loadMovies(MoviesFilterType.POPULAR_MOVIES);
+            loadMovies(DataSourceContact.FILTER_MOST_POPULAR);
             isFirstLoad = false;
         }
     }
 
     @Override
-    public void loadMovies(MoviesFilterType moviesFilterType) {
+    public void loadMovies(int moviesFilterType) {
 
         // avoid loading movies if the current selection stays the same
         if(moviesFilterType != mCurrentFilterSelection) {

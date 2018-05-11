@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,13 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 import ua.yurezcv.popularmovies.R;
+import ua.yurezcv.popularmovies.data.DataSourceContact;
 import ua.yurezcv.popularmovies.data.model.Movie;
 import ua.yurezcv.popularmovies.moviedetail.MovieDetail;
 import ua.yurezcv.popularmovies.utils.EndlessRecyclerViewScrollListener;
-
-import java.util.List;
 
 /**
  * A fragment representing a grid of Movies.
@@ -124,17 +125,18 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
             case R.id.menu_most_popular:
                 // show most popular movies
                 clearAdapterData();
-                mPresenter.loadMovies(MoviesFilterType.POPULAR_MOVIES);
+                mPresenter.loadMovies(DataSourceContact.FILTER_MOST_POPULAR);
                 break;
             case R.id.menu_highest_rated:
                 // show highest rated movies
                 clearAdapterData();
-                mPresenter.loadMovies(MoviesFilterType.HIGHEST_RATED_MOVIES);
+                mPresenter.loadMovies(DataSourceContact.FILTER_HIGHEST_RATED);
                 break;
             case R.id.menu_favorites:
                 // show user's favorite movies
-                clearAdapterData();
-                mPresenter.loadMovies(MoviesFilterType.FAVORITES);
+                // clearAdapterData();
+                // mPresenter.loadMovies(DataSourceContact.FILTER_FAVORITES);
+                Toast.makeText(getContext(), "Hasn't been implemented yet", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;

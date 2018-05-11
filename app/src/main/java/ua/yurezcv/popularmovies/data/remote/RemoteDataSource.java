@@ -12,11 +12,8 @@ import ua.yurezcv.popularmovies.data.model.Review;
 import ua.yurezcv.popularmovies.data.model.ReviewsResult;
 import ua.yurezcv.popularmovies.data.model.Trailer;
 import ua.yurezcv.popularmovies.data.model.TrailersResult;
-import ua.yurezcv.popularmovies.movies.MoviesFilterType;
 
 public class RemoteDataSource implements DataSourceContact {
-
-    private static final int DEFAULT_PAGE = 1;
 
     private MoviesAPI mMoviesAPI;
 
@@ -25,18 +22,18 @@ public class RemoteDataSource implements DataSourceContact {
     }
 
     @Override
-    public void loadMovies(MoviesFilterType filterType, LoadMoviesCallback callback) {
+    public void loadMovies(int filterType, LoadMoviesCallback callback) {
         loadMovies(filterType, INITIAL_LOAD_PAGE, callback);
     }
 
     @Override
-    public void loadMovies(MoviesFilterType filterType, int page, final LoadMoviesCallback callback) {
+    public void loadMovies(int filterType, int page, final LoadMoviesCallback callback) {
         Call<MoviesResult> call = null;
         switch (filterType) {
-            case POPULAR_MOVIES:
+            case FILTER_MOST_POPULAR:
                 call = mMoviesAPI.getPopularMovies(page);
                 break;
-            case HIGHEST_RATED_MOVIES:
+            case FILTER_HIGHEST_RATED:
                 call = mMoviesAPI.getHighestRatedMovies(page);
                 break;
         }

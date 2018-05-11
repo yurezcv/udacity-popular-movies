@@ -7,7 +7,6 @@ import ua.yurezcv.popularmovies.data.model.Movie;
 import ua.yurezcv.popularmovies.data.model.Review;
 import ua.yurezcv.popularmovies.data.model.Trailer;
 import ua.yurezcv.popularmovies.data.remote.RemoteDataSource;
-import ua.yurezcv.popularmovies.movies.MoviesFilterType;
 
 /*
  * Singleton class for data repository (remote only for now) and caching acquired data
@@ -20,7 +19,7 @@ public class DataRepository implements DataSourceContact {
     private final RemoteDataSource mRemoteDataSource;
 
     private List<Movie> mMoviesCache;
-    private MoviesFilterType mLastFilterType;
+    private int mLastFilterType;
 
     private int mSelectedPosition;
 
@@ -39,14 +38,14 @@ public class DataRepository implements DataSourceContact {
     }
 
     @Override
-    public void loadMovies(MoviesFilterType filterType, final LoadMoviesCallback callback) {
+    public void loadMovies(int filterType, final LoadMoviesCallback callback) {
         // clear cache for an initial movie load
         mMoviesCache.clear();
         loadMovies(filterType, INITIAL_LOAD_PAGE, callback);
     }
 
     @Override
-    public void loadMovies(MoviesFilterType filterType, int page, final LoadMoviesCallback callback) {
+    public void loadMovies(int filterType, int page, final LoadMoviesCallback callback) {
         if(filterType == mLastFilterType && !mMoviesCache.isEmpty() && page == INITIAL_LOAD_PAGE) {
             callback.onSuccess(mMoviesCache);
         } else {

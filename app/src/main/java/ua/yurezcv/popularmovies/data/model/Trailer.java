@@ -24,10 +24,10 @@ public class Trailer {
     private String name;
 
     @SerializedName("site")
-    private Site site;
+    private String site;
 
     @SerializedName("type")
-    private Type type;
+    private String type;
 
     public String getId() {
         return id;
@@ -53,19 +53,19 @@ public class Trailer {
         this.name = name;
     }
 
-    public Site getSite() {
+    public String getSite() {
         return site;
     }
 
-    public void setSite(Site site) {
+    public void setSite(String site) {
         this.site = site;
     }
 
-    public Type getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -80,14 +80,4 @@ public class Trailer {
                 '}';
     }
 
-    public enum Type {
-        @SerializedName("Trailer") TRAILER,
-        @SerializedName("Teaser") TEASER,
-        @SerializedName("Clip") CLIP,
-        @SerializedName("Featurette") FEATURETTE
-    }
-
-    public enum Site {
-        @SerializedName("YouTube") YOUTUBE
-    }
 }

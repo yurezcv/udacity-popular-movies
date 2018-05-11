@@ -5,12 +5,15 @@ import java.util.List;
 import ua.yurezcv.popularmovies.data.model.Movie;
 import ua.yurezcv.popularmovies.data.model.Review;
 import ua.yurezcv.popularmovies.data.model.Trailer;
-import ua.yurezcv.popularmovies.movies.MoviesFilterType;
 
 
 public interface DataSourceContact {
 
     int INITIAL_LOAD_PAGE = 1;
+
+    int FILTER_MOST_POPULAR = 111;
+    int FILTER_HIGHEST_RATED = 222;
+    int FILTER_FAVORITES = 333;
 
     interface LoadMoviesCallback {
         void onSuccess(List<Movie> movies);
@@ -27,9 +30,9 @@ public interface DataSourceContact {
         void onFailure(Throwable throwable);
     }
 
-    void loadMovies(MoviesFilterType filterType, LoadMoviesCallback callback);
+    void loadMovies(int filterType, LoadMoviesCallback callback);
 
-    void loadMovies(MoviesFilterType filterType, int page, LoadMoviesCallback callback);
+    void loadMovies(int filterType, int page, LoadMoviesCallback callback);
 
     void loadMovieTrailers(long movieId, LoadTrailersCallback callback);
 

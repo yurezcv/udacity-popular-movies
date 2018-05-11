@@ -25,7 +25,7 @@ public interface MoviesContract {
 
         void onResume();
 
-        void loadMovies(MoviesFilterType moviesFilterType);
+        void loadMovies(int moviesFilterType);
 
         void loadMoviesFromPage(int page);
 

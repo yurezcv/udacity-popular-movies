@@ -1,7 +1,6 @@
 package ua.yurezcv.popularmovies.data.local;
 
 import ua.yurezcv.popularmovies.data.DataSourceContact;
-import ua.yurezcv.popularmovies.movies.MoviesFilterType;
 
 public class LocalDataSource implements DataSourceContact {
 
@@ -9,12 +8,12 @@ public class LocalDataSource implements DataSourceContact {
     }
 
     @Override
-    public void loadMovies(MoviesFilterType filterType, LoadMoviesCallback callback) {
+    public void loadMovies(int filterType, LoadMoviesCallback callback) {
         loadMovies(filterType, INITIAL_LOAD_PAGE, callback);
     }
 
     @Override
-    public void loadMovies(MoviesFilterType filterType, int page, LoadMoviesCallback callback) {
+    public void loadMovies(int filterType, int page, LoadMoviesCallback callback) {
         // TODO load movies from Content Provider
     }
 
