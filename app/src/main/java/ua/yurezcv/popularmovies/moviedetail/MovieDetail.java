@@ -3,23 +3,19 @@ package ua.yurezcv.popularmovies.moviedetail;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
-import java.util.List;
 
 import ua.yurezcv.popularmovies.R;
-import ua.yurezcv.popularmovies.data.DataRepository;
-import ua.yurezcv.popularmovies.data.DataSourceContact;
 import ua.yurezcv.popularmovies.data.model.Movie;
-import ua.yurezcv.popularmovies.data.model.Review;
-import ua.yurezcv.popularmovies.data.model.Trailer;
 import ua.yurezcv.popularmovies.utils.Utils;
 
 public class MovieDetail extends AppCompatActivity implements MovieDetailContract.View {
@@ -30,6 +26,7 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
 
     private TextView mTitleTextView;
     private TextView mReleaseDateTextView;
+    private ImageView mBackdropImageView;
     private ImageView mPosterImageView;
     private TextView mOverviewTextView;
     private RatingBar mRatingBar;
@@ -41,6 +38,7 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
 
         mTitleTextView = findViewById(R.id.tv_movie_title);
         mReleaseDateTextView = findViewById(R.id.tv_movie_release_date);
+        mBackdropImageView = findViewById(R.id.iv_detail_backdrop);
         mPosterImageView = findViewById(R.id.iv_detail_poster);
         mOverviewTextView = findViewById(R.id.tv_movie_overview);
         mRatingBar = findViewById(R.id.rb_movie_rating);
@@ -63,6 +61,25 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.movie_detail_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add_to_favorites:
+                // show most popular movies
+                item.setIcon(R.drawable.ic_menu_favorites);
+                Toast.makeText(this, "Hasn't been implemented yet", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
+    }
+
+
+    @Override
     public void showMovieDetail(Movie movie) {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setTitle(movie.getTitle());
@@ -78,11 +95,17 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
             e.printStackTrace();
         }
 
-        String posterPath = movie.getBackdropPath();
-        String fullImgUrl = Utils.createLargePosterUrl(posterPath);
+        String backdropPathPath = movie.getBackdropPath();
+        String backdropFullUrl = Utils.createLargePosterUrl(backdropPathPath);
+        String posterPath = movie.getPosterPath();
+        String posterFullUrl = Utils.createPosterUrl(posterPath);
 
         Picasso.get()
-                .load(fullImgUrl)
+                .load(backdropFullUrl)
+                .into(mBackdropImageView);
+
+        Picasso.get()
+                .load(posterFullUrl)
                 .into(mPosterImageView);
 
         // Log.d("MOVIE_DETAIL", "movieId = " + String.valueOf(movie.getId()));

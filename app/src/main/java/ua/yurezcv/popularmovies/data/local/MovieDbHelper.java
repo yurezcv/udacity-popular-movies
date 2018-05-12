@@ -8,11 +8,11 @@ import ua.yurezcv.popularmovies.data.local.MovieContract.MovieEntry;
 
 public class MovieDbHelper extends SQLiteOpenHelper {
 
-    public static final String DB_NAME = "movies.db";
+    private static final String DB_NAME = "movies.db";
 
     private static final int DB_VERSION = 1;
 
-    public MovieDbHelper(Context context) {
+    MovieDbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -20,7 +20,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         /*
          * This String will contain a simple SQL statement that will create a table that will
-         * cache our weather data.
+         * cache our movies data.
          */
         final String SQL_CREATE_WEATHER_TABLE =
 

@@ -1,74 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".moviedetail.MovieDetail">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_detail_poster"
+            android:id="@+id/iv_detail_backdrop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="@string/content_desc_iv_movie_poster_default"
             android:cropToPadding="false"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <android.support.v4.widget.Space
+            android:id="@+id/view_spacer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="104dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_detail_backdrop"
+            app:layout_constraintLeft_toLeftOf="@id/iv_detail_backdrop"
+            app:layout_constraintRight_toRightOf="@id/iv_detail_backdrop" />
+
+        <LinearLayout
+            android:id="@+id/ll_detail_poster_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBorderBg"
+            android:orientation="vertical"
+            android:padding="@dimen/detail_poster_padding"
+            android:layout_marginStart="@dimen/detail_poster_margin"
+            android:layout_marginLeft="@dimen/detail_poster_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/view_spacer">
+
+            <ImageView
+                android:id="@+id/iv_detail_poster"
+                android:layout_width="88dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/content_desc_iv_movie_poster_default"
+                tools:src="@tools:sample/backgrounds/scenic" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin">
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_detail_poster_wrapper">
 
-        <TextView
-            android:id="@+id/tv_movie_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/colorPrimary"
-            tools:text="Rockie" />
+            <TextView
+                android:id="@+id/tv_movie_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/colorPrimary"
+                tools:text="Rockie" />
 
-        <TextView
-            android:id="@+id/tv_movie_release_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-            android:textColor="@color/colorPrimaryDark"
-            tools:text="April 25, 2018" />
+            <TextView
+                android:id="@+id/tv_movie_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                android:textColor="@color/colorPrimaryDark"
+                tools:text="April 25, 2018" />
 
-        <RatingBar
-            android:id="@+id/rb_movie_rating"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:numStars="10"
-            android:stepSize="0.5" />
+            <RatingBar
+                android:id="@+id/rb_movie_rating"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/movie_detail_rating_bar_margin_top"
+                android:numStars="10"
+                android:stepSize="0.1" />
 
-        <TextView
-            android:id="@+id/label_tv_overview"
-            style="@style/DetailLabel"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/label_overview"
-            android:textAppearance="@style/DetailLabel"/>
+            <TextView
+                android:id="@+id/label_tv_overview"
+                style="@style/DetailLabel"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/label_overview"
+                android:textAppearance="@style/DetailLabel" />
 
-        <TextView
-            android:id="@+id/tv_movie_overview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="Sample overview text" />
+            <TextView
+                android:id="@+id/tv_movie_overview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/movie_detail_margin_bottom"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:text="Sample overview text" />
         </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
-    </LinearLayout>
 </ScrollView>

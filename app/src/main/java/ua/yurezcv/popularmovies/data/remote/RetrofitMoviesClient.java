@@ -1,8 +1,5 @@
 package ua.yurezcv.popularmovies.data.remote;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
@@ -19,11 +16,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitMoviesClient {
 
-    private static RetrofitMoviesClient instance = null;
+    private static volatile RetrofitMoviesClient instance;
 
     private MoviesAPI moviesAPI;
 
     private RetrofitMoviesClient() {
+
+        // Prevent form the reflection api.
+        if (instance != null){
+            throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
+        }
 
         // add http client interceptor to add an API key to every query
         OkHttpClient.Builder httpClient =
@@ -57,8 +59,12 @@ public class RetrofitMoviesClient {
     }
 
     public static RetrofitMoviesClient getInstance() {
+
+        // making instance thread safe
         if (instance == null) {
-            instance = new RetrofitMoviesClient();
+            synchronized (RetrofitMoviesClient.class) {
+                if (instance == null) instance = new RetrofitMoviesClient();
+            }
         }
 
         return instance;
