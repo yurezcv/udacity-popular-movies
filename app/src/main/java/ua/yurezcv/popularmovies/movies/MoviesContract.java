@@ -15,6 +15,8 @@ public interface MoviesContract {
         void showMovies(List<Movie> movies);
 
         void showError(String errorMessage);
+
+        void notifyAdapterItemRemoved(int position);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -30,5 +32,11 @@ public interface MoviesContract {
         void loadMoviesFromPage(int page);
 
         void onMovieSelected(int position);
+
+        int onSaveFilterState();
+
+        void onRestoreFilterState(int filter);
+
+        int updateMenuItem();
     }
 }

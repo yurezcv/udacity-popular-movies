@@ -4,6 +4,7 @@
     <item
         android:id="@+id/menu_most_popular"
         android:title="@string/menu_filter_most_popular"
+        android:enabled="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_highest_rated"

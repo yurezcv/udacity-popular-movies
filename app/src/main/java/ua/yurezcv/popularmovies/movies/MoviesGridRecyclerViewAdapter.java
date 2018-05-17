@@ -1,6 +1,7 @@
 package ua.yurezcv.popularmovies.movies;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +93,17 @@ public class MoviesGridRecyclerViewAdapter extends RecyclerView.Adapter<MoviesGr
         if(movieList != null) {
             mMoviesList.addAll(movieList);
         }
+    }
+
+/*    public List<Movie> getData() {
+        return mMoviesList;
+    }*/
+
+    /* Handle removing an item from the adapter */
+    public void removeDataItem(int position) {
+        mMoviesList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, getItemCount());
     }
 
     public void clearData() {

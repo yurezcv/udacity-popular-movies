@@ -7,7 +7,7 @@ public class MovieContract {
 
     public static final String CONTENT_AUTHORITY = "ua.yurezcv.popularmovies";
 
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_MOVIE = "movie";
 

@@ -3,6 +3,9 @@ package ua.yurezcv.popularmovies.movies;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,12 +21,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import ua.yurezcv.popularmovies.R;
+import ua.yurezcv.popularmovies.data.DataRepository;
 import ua.yurezcv.popularmovies.data.DataSourceContact;
 import ua.yurezcv.popularmovies.data.model.Movie;
 import ua.yurezcv.popularmovies.moviedetail.MovieDetail;
 import ua.yurezcv.popularmovies.utils.EndlessRecyclerViewScrollListener;
+import ua.yurezcv.popularmovies.utils.threading.AppExecutors;
+import ua.yurezcv.popularmovies.utils.threading.DiskIOThreadExecutor;
 
 /**
  * A fragment representing a grid of Movies.
@@ -31,6 +38,8 @@ import ua.yurezcv.popularmovies.utils.EndlessRecyclerViewScrollListener;
 public class MoviesFragment extends Fragment implements MoviesContract.View, MoviesGridRecyclerViewAdapter.MoviesGridAdapterOnClickHandler {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
+
+    private static final String KEY_FILTER_STATE = "key-filter-state";
 
     private int mColumnCount = 2;
 
@@ -63,7 +72,12 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
 
-        mPresenter = new MoviesPresenter();
+        AppExecutors appExecutors = AppExecutors.getInstance(new DiskIOThreadExecutor(),
+                Executors.newFixedThreadPool(AppExecutors.THREAD_COUNT),
+                new AppExecutors.MainThreadExecutor());
+        DataRepository dataRepository = DataRepository.getInstance(getActivity().getApplicationContext(), appExecutors);
+
+        mPresenter = new MoviesPresenter(dataRepository);
 
         mMoviesGridAdapter = new MoviesGridRecyclerViewAdapter(getContext(), this);
     }
@@ -120,6 +134,43 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.movies_filter_menu, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        // get current filter value from the presenter
+        int currentMenu = mPresenter.updateMenuItem();
+
+        // init menu items
+        MenuItem popular = menu.findItem(R.id.menu_most_popular);
+        MenuItem highestRated = menu.findItem(R.id.menu_highest_rated);
+        MenuItem favorites = menu.findItem(R.id.menu_favorites);
+
+        // enable/disable menu items based on active filter selection
+        switch (currentMenu) {
+            case DataSourceContact.FILTER_MOST_POPULAR:
+                popular.setEnabled(false);
+                highestRated.setEnabled(true);
+                favorites.setEnabled(true);
+                break;
+            case DataSourceContact.FILTER_HIGHEST_RATED:
+                popular.setEnabled(true);
+                highestRated.setEnabled(false);
+                favorites.setEnabled(true);
+                break;
+            case DataSourceContact.FILTER_FAVORITES:
+                popular.setEnabled(true);
+                highestRated.setEnabled(true);
+                favorites.setEnabled(false);
+                break;
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_most_popular:
@@ -134,23 +185,35 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
                 break;
             case R.id.menu_favorites:
                 // show user's favorite movies
-                // clearAdapterData();
-                // mPresenter.loadMovies(DataSourceContact.FILTER_FAVORITES);
-                Toast.makeText(getContext(), "Hasn't been implemented yet", Toast.LENGTH_SHORT).show();
+                clearAdapterData();
+                mPresenter.loadMovies(DataSourceContact.FILTER_FAVORITES);
                 break;
         }
         return true;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.movies_filter_menu, menu);
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // save the last selected filter value
+        outState.putInt(KEY_FILTER_STATE, mPresenter.onSaveFilterState());
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null) {
+            // restore the last selected filter value
+            mPresenter.onRestoreFilterState(savedInstanceState.getInt(KEY_FILTER_STATE));
+        }
     }
 
     @Override
     public void setProgressIndicator(boolean active) {
         if(active) {
             mMoviesGridRecycleView.setVisibility(View.INVISIBLE);
+            // hide an error text before showing the progress bar
+            mErrorTextView.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.VISIBLE);
         } else {
             mProgressBar.setVisibility(View.INVISIBLE);
@@ -181,15 +244,21 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
     }
 
     @Override
+    public void notifyAdapterItemRemoved(int position) {
+        mMoviesGridAdapter.removeDataItem(position);
+    }
+
+    @Override
     public void onClick(int position) {
         mPresenter.onMovieSelected(position);
         Intent movieDetailIntent = new Intent(getActivity(), MovieDetail.class);
         startActivity(movieDetailIntent);
     }
 
-    /* Simple method to clear adapter data when a user changes the filter setting */
+    // Simple method to clear the adapter data when a user changes the filter setting
     private void clearAdapterData() {
         mScrollListener.resetState();
         mMoviesGridAdapter.clearData();
+        getActivity().invalidateOptionsMenu();
     }
 }

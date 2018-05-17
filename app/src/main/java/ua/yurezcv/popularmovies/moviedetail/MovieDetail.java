@@ -1,6 +1,7 @@
 package ua.yurezcv.popularmovies.moviedetail;
 
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -13,10 +14,14 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
+import java.util.concurrent.Executors;
 
 import ua.yurezcv.popularmovies.R;
+import ua.yurezcv.popularmovies.data.DataRepository;
 import ua.yurezcv.popularmovies.data.model.Movie;
 import ua.yurezcv.popularmovies.utils.Utils;
+import ua.yurezcv.popularmovies.utils.threading.AppExecutors;
+import ua.yurezcv.popularmovies.utils.threading.DiskIOThreadExecutor;
 
 public class MovieDetail extends AppCompatActivity implements MovieDetailContract.View {
 
@@ -44,7 +49,12 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
         mRatingBar = findViewById(R.id.rb_movie_rating);
 
         mActionBar = getSupportActionBar();
-        mPresenter = new MovieDetailPresenter();
+
+        AppExecutors appExecutors = AppExecutors.getInstance(new DiskIOThreadExecutor(),
+                Executors.newFixedThreadPool(AppExecutors.THREAD_COUNT),
+                new AppExecutors.MainThreadExecutor());
+
+        mPresenter = new MovieDetailPresenter(DataRepository.getInstance(getApplicationContext(), appExecutors));
     }
 
     @Override
@@ -52,6 +62,8 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
         super.onResume();
         mPresenter.takeView(this);
         mPresenter.getSelectedMovie();
+        invalidateOptionsMenu();
+        mPresenter.checkIfMovieInFavorites();
     }
 
     @Override
@@ -67,17 +79,25 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.menu_add_to_favorites);
+        item.setIcon(getFavoritesIconId());
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add_to_favorites:
                 // show most popular movies
-                item.setIcon(R.drawable.ic_menu_favorites);
-                Toast.makeText(this, "Hasn't been implemented yet", Toast.LENGTH_SHORT).show();
+                mPresenter.updateFavoritesValue();
                 break;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+            return true;
         }
         return true;
     }
-
 
     @Override
     public void showMovieDetail(Movie movie) {
@@ -108,7 +128,13 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
                 .load(posterFullUrl)
                 .into(mPosterImageView);
 
-        // Log.d("MOVIE_DETAIL", "movieId = " + String.valueOf(movie.getId()));
+        // TODO add trailers and reviews to this screen
+
+        // TODO add sharing for YouTube trailers
+
+        // TODO add offline access for Favorites
+
+        // TODO handle network status in MoviesFragment
 
 /*        DataRepository.getInstance().loadMovieTrailers(movie.getId(), new DataSourceContact.LoadTrailersCallback() {
             @Override
@@ -133,5 +159,20 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
                 Log.e("MAIN_ACTIVITY", throwable.getMessage());
             }
         });*/
+    }
+
+    @Override
+    public void updateMenu() {
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private int getFavoritesIconId() {
+        return mPresenter.getFavoritesValue()
+                ? R.drawable.ic_menu_favorites : R.drawable.ic_menu_favorites_outline;
     }
 }

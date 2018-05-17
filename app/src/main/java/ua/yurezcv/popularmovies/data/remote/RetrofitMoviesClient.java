@@ -22,8 +22,8 @@ public class RetrofitMoviesClient {
 
     private RetrofitMoviesClient() {
 
-        // Prevent form the reflection api.
-        if (instance != null){
+        // Prevent from the reflection api.
+        if (instance != null) {
             throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
         }
 

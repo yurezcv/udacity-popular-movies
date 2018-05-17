@@ -1,9 +1,13 @@
 package ua.yurezcv.popularmovies.utils;
 
+import android.net.Uri;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import ua.yurezcv.popularmovies.data.local.MovieContract;
 
 public class Utils {
 

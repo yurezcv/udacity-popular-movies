@@ -1,5 +1,6 @@
 package ua.yurezcv.popularmovies.data.model;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,6 +13,16 @@ import ua.yurezcv.popularmovies.utils.Utils;
 public class Movie implements Parcelable {
 
     public Movie() {
+    }
+
+    public Movie(Cursor cursor) {
+        this.setId(cursor.getLong(1));
+        this.setTitle(cursor.getString(2));
+        this.setOverview(cursor.getString(3));
+        this.setPosterPath(cursor.getString(4));
+        this.setBackdropPath(cursor.getString(5));
+        this.setReleaseDate(cursor.getString(6));
+        this.setVoteAverage(cursor.getFloat(7));
     }
 
     @SerializedName("id")

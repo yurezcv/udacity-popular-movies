@@ -119,7 +119,33 @@ public class MoviesProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        int rowsDeleted;
+
+        if (null == selection) selection = "1";
+
+        switch (sUriMatcher.match(uri)) {
+
+            case CODE_FAVORITE_MOVIE_DETAILS:
+                // Get the task ID from the URI path
+                String movieId = uri.getPathSegments().get(1);
+
+                // Use new String[] selectionArgs to remove only current movie
+                rowsDeleted = mDbHelper.getWritableDatabase().delete(
+                        MovieContract.MovieEntry.TABLE_NAME,
+                        selection,
+                        new String[]{movieId});
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        /* If we actually deleted any rows, notify that a change has occurred to this URI */
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsDeleted;
     }
 
     @Override

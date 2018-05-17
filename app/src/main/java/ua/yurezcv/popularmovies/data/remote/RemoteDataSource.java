@@ -121,5 +121,20 @@ public class RemoteDataSource implements DataSourceContact {
         });
     }
 
+    @Override
+    public void addToFavorites(Movie movie, AddToFavoritesCallback callback) {
+        // local implementation only
+    }
+
+    @Override
+    public void removeFromFavorites(long movieId, RemoveFromFavoritesCallback callback) {
+        // local implementation only
+    }
+
+    @Override
+    public void isMovieInFavorites(long movieId, IsMovieInFavoritesCallback callback) {
+        // local implementation only
+    }
+
 
 }
