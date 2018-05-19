@@ -14,14 +14,14 @@ import static ua.yurezcv.popularmovies.data.local.MovieContract.MovieEntry.TABLE
 
 public class MoviesProvider extends ContentProvider {
 
-    public static final int CODE_FAVORITE_MOVIES = 111;
-    public static final int CODE_FAVORITE_MOVIE_DETAILS = 222;
+    private static final int CODE_FAVORITE_MOVIES = 111;
+    private static final int CODE_FAVORITE_MOVIE_DETAILS = 222;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MovieDbHelper mDbHelper;
 
     /* Simple URI matcher for custom codes */
-    public static UriMatcher buildUriMatcher() {
+    private static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.CONTENT_AUTHORITY;

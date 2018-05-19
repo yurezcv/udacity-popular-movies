@@ -1,7 +1,5 @@
 package ua.yurezcv.popularmovies.movies;
 
-import android.util.Log;
-
 import java.util.List;
 
 import ua.yurezcv.popularmovies.data.DataRepository;
@@ -10,7 +8,7 @@ import ua.yurezcv.popularmovies.data.model.Movie;
 
 public class MoviesPresenter implements MoviesContract.Presenter {
 
-    private DataRepository mDataRepository;
+    private final DataRepository mDataRepository;
 
     private MoviesContract.View mView;
 
@@ -90,7 +88,6 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     @Override
     public void loadMoviesFromPage(int page) {
-        // TODO add a progress bar for page loading
         // pagination load only for non-favorite movies
         if (mCurrentFilterSelection != DataSourceContact.FILTER_FAVORITES) {
             mDataRepository.loadMovies(mCurrentFilterSelection, page, new DataSourceContact.LoadMoviesCallback() {

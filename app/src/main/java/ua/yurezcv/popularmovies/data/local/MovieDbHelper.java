@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import ua.yurezcv.popularmovies.data.local.MovieContract.MovieEntry;
 
-public class MovieDbHelper extends SQLiteOpenHelper {
+class MovieDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "movies.db";
 

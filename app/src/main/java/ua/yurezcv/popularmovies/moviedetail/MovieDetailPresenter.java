@@ -3,12 +3,16 @@ package ua.yurezcv.popularmovies.moviedetail;
 
 import android.net.Uri;
 
+import java.util.List;
+
 import ua.yurezcv.popularmovies.data.DataRepository;
 import ua.yurezcv.popularmovies.data.DataSourceContact;
+import ua.yurezcv.popularmovies.data.model.Review;
+import ua.yurezcv.popularmovies.data.model.Trailer;
 
 public class MovieDetailPresenter implements MovieDetailContract.Presenter {
 
-    private DataRepository mDataRepository;
+    private final DataRepository mDataRepository;
 
     private MovieDetailContract.View mView;
 
@@ -76,6 +80,36 @@ public class MovieDetailPresenter implements MovieDetailContract.Presenter {
                 if (isInFavorites) {
                     mView.updateMenu();
                 }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                mView.showErrorMessage(throwable.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void loadReviews() {
+        mDataRepository.loadMovieReviews(new DataSourceContact.LoadReviewsCallback() {
+            @Override
+            public void onSuccess(List<Review> reviews) {
+                mView.showReviews(reviews);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                mView.showErrorMessage(throwable.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void loadTrailers() {
+        mDataRepository.loadMovieTrailers(new DataSourceContact.LoadTrailersCallback() {
+            @Override
+            public void onSuccess(List<Trailer> trailers) {
+                mView.showTrailers(trailers);
             }
 
             @Override

@@ -6,6 +6,7 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.List;
 
+import ua.yurezcv.popularmovies.PopularMoviesApp;
 import ua.yurezcv.popularmovies.data.local.LocalDataSource;
 import ua.yurezcv.popularmovies.data.model.Movie;
 import ua.yurezcv.popularmovies.data.model.Review;
@@ -81,11 +82,20 @@ public class DataRepository implements DataSourceContact {
             };
 
             if(mLastFilterType != FILTER_FAVORITES) {
-                mRemoteDataSource.loadMovies(filterType, page, loadMoviesCallback);
+                if(PopularMoviesApp.isOnline()) {
+                    mRemoteDataSource.loadMovies(filterType, page, loadMoviesCallback);
+                } else {
+                    callback.onFailure(new Throwable("Please connect to Internet"));
+                }
             } else {
                 mLocalDataSource.loadMovies(filterType, loadMoviesCallback);
             }
         }
+    }
+
+    // get last selected movies value from the saved in this class variable
+    public void loadMovieTrailers(LoadTrailersCallback callback) {
+        loadMovieTrailers(getLastSelectedMovie().getId(), callback);
     }
 
     @Override
@@ -101,6 +111,11 @@ public class DataRepository implements DataSourceContact {
                 callback.onFailure(throwable);
             }
         });
+    }
+
+    // get last selected movies value from the saved in this class variable
+    public void loadMovieReviews(LoadReviewsCallback callback) {
+        loadMovieReviews(getLastSelectedMovie().getId(), callback);
     }
 
     @Override

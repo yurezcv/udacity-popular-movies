@@ -3,16 +3,6 @@ package ua.yurezcv.popularmovies.data.model;
 import com.google.gson.annotations.SerializedName;
 
 public class Trailer {
-    /*
-        "id":"533ec653c3a3685448000249",
-        "iso_639_1":"en",
-        "iso_3166_1":"US",
-        "key":"K_tLp7T6U1c",
-        "name":"The Shawshank Redemption - Trailer",
-        "site":"YouTube",
-        "size":480,
-        "type":"Trailer"
-    */
 
     @SerializedName("id")
     private String id;

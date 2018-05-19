@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/list_item_review_vertical_padding"
+    android:paddingEnd="@dimen/list_item_margin"
+    android:paddingLeft="@dimen/list_item_margin"
+    android:paddingRight="@dimen/list_item_margin"
+    android:paddingStart="@dimen/list_item_margin"
+    android:paddingTop="@dimen/list_item_review_vertical_padding">
+
+    <TextView
+        android:id="@+id/tv_review_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        tools:text="yurezcv" />
+
+    <TextView
+        android:id="@+id/tv_review_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColorLink="@color/colorPrimary"
+        android:autoLink="web"
+        tools:text="Another great movie from Steven Spielberg" />
+</LinearLayout>

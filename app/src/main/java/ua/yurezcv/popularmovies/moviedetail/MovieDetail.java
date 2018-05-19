@@ -1,12 +1,19 @@
 package ua.yurezcv.popularmovies.moviedetail;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,11 +21,14 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import ua.yurezcv.popularmovies.R;
 import ua.yurezcv.popularmovies.data.DataRepository;
 import ua.yurezcv.popularmovies.data.model.Movie;
+import ua.yurezcv.popularmovies.data.model.Review;
+import ua.yurezcv.popularmovies.data.model.Trailer;
 import ua.yurezcv.popularmovies.utils.Utils;
 import ua.yurezcv.popularmovies.utils.threading.AppExecutors;
 import ua.yurezcv.popularmovies.utils.threading.DiskIOThreadExecutor;
@@ -35,6 +45,13 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
     private ImageView mPosterImageView;
     private TextView mOverviewTextView;
     private RatingBar mRatingBar;
+    private RecyclerView mTrailersRecyclerView;
+    private RecyclerView mReviewsRecyclerView;
+    private LinearLayout mTrailersLayout;
+    private LinearLayout mReviewLayout;
+
+    private TrailersAdapter mTrailersAdapter;
+    private ReviewsAdapter mReviewsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +64,32 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
         mPosterImageView = findViewById(R.id.iv_detail_poster);
         mOverviewTextView = findViewById(R.id.tv_movie_overview);
         mRatingBar = findViewById(R.id.rb_movie_rating);
+        mTrailersLayout = findViewById(R.id.ll_trailers);
+        mReviewLayout = findViewById(R.id.ll_reviews);
 
         mActionBar = getSupportActionBar();
+
+        mTrailersRecyclerView = findViewById(R.id.rv_trailers);
+        mTrailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mTrailersAdapter = new TrailersAdapter(this, new TrailersAdapter.TrailersAdapterOnClickHandler() {
+            @Override
+            public void onShareButtonClick(Trailer trailer) {
+                shareTrailer(trailer.getKey());
+            }
+
+            @Override
+            public void onViewClick(Trailer trailer) {
+                openYoutubeVideo(trailer.getKey());
+            }
+        });
+
+        mTrailersRecyclerView.setAdapter(mTrailersAdapter);
+
+        mReviewsRecyclerView = findViewById(R.id.rv_reviews);
+        mReviewsAdapter = new ReviewsAdapter(this);
+        mReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mReviewsRecyclerView.setAdapter(mReviewsAdapter);
 
         AppExecutors appExecutors = AppExecutors.getInstance(new DiskIOThreadExecutor(),
                 Executors.newFixedThreadPool(AppExecutors.THREAD_COUNT),
@@ -128,37 +169,15 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
                 .load(posterFullUrl)
                 .into(mPosterImageView);
 
-        // TODO add trailers and reviews to this screen
+        // check if review have been loaded already
+        if(mReviewsAdapter.isAdapterEmpty()) {
+            mPresenter.loadReviews();
+        }
 
-        // TODO add sharing for YouTube trailers
-
-        // TODO add offline access for Favorites
-
-        // TODO handle network status in MoviesFragment
-
-/*        DataRepository.getInstance().loadMovieTrailers(movie.getId(), new DataSourceContact.LoadTrailersCallback() {
-            @Override
-            public void onSuccess(List<Trailer> trailers) {
-                Log.d("MAIN_ACTIVITY", trailers.toString());
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                Log.e("MAIN_ACTIVITY", throwable.getMessage());
-            }
-        });
-
-        DataRepository.getInstance().loadMovieReviews(movie.getId(), new DataSourceContact.LoadReviewsCallback() {
-            @Override
-            public void onSuccess(List<Review> reviews) {
-                Log.d("MAIN_ACTIVITY", reviews.toString());
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                Log.e("MAIN_ACTIVITY", throwable.getMessage());
-            }
-        });*/
+        // check if trailers have been loaded already
+        if(mTrailersAdapter.isAdapterEmpty()) {
+            mPresenter.loadTrailers();
+        }
     }
 
     @Override
@@ -169,6 +188,71 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
     @Override
     public void showErrorMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showTrailers(final List<Trailer> trailers) {
+        // hide trailers layout if there is no trailers for the movie
+        if(trailers.isEmpty()) {
+            hideTrailersLayout();
+        } else {
+            final int currentSize = mTrailersAdapter.getItemCount();
+            mTrailersRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mTrailersAdapter.setAdapterData(trailers);
+                    mTrailersAdapter.notifyItemRangeInserted(currentSize, trailers.size());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void showReviews(final List<Review> reviews) {
+        if(reviews.isEmpty()) {
+            hideReviewsLayout();
+        } else {
+            final int currentSize = mReviewsAdapter.getItemCount();
+            mReviewsRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mReviewsAdapter.setAdapterData(reviews);
+                    mReviewsAdapter.notifyItemRangeInserted(currentSize, reviews.size());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void hideReviewsLayout() {
+        mReviewLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideTrailersLayout() {
+        mTrailersLayout.setVisibility(View.GONE);
+    }
+
+    private void openYoutubeVideo(String key) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + key));
+        // Check if the youtube app exists on the device
+        if (intent.resolveActivity(getPackageManager()) == null) {
+            // use a browser otherwise
+            intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(Utils.makeYoutubeLink(key)));
+        }
+
+        startActivity(intent);
+    }
+
+    private void shareTrailer(String key) {
+        Intent shareIntent = ShareCompat.IntentBuilder.from(this)
+                .setType("text/plain")
+                .setText("Hey friend, check out this awesome trailer! " +
+                        Utils.makeYoutubeLink(key) + " #udacity-popular-movies")
+                .getIntent();
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        startActivity(shareIntent);
     }
 
     private int getFavoritesIconId() {

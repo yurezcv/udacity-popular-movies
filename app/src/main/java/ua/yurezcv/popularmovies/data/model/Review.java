@@ -3,12 +3,6 @@ package ua.yurezcv.popularmovies.data.model;
 import com.google.gson.annotations.SerializedName;
 
 public class Review {
-    /*
-        "author":"elshaarawy",
-        "content":"very good movie 9.5/10 محمد الشعراوى",
-        "id":"5723a329c3a3682e720005db",
-        "url":"https://www.themoviedb.org/review/5723a329c3a3682e720005db"
-    */
 
     @SerializedName("id")
     private String id;

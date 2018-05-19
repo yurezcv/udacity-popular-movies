@@ -1,8 +1,12 @@
 package ua.yurezcv.popularmovies.moviedetail;
 
+import java.util.List;
+
 import ua.yurezcv.popularmovies.BasePresenter;
 import ua.yurezcv.popularmovies.BaseView;
 import ua.yurezcv.popularmovies.data.model.Movie;
+import ua.yurezcv.popularmovies.data.model.Review;
+import ua.yurezcv.popularmovies.data.model.Trailer;
 
 public interface MovieDetailContract {
 
@@ -13,6 +17,14 @@ public interface MovieDetailContract {
         void updateMenu();
 
         void showErrorMessage(String message);
+
+        void showTrailers(List<Trailer> trailers);
+
+        void showReviews(List<Review> reviews);
+
+        void hideReviewsLayout();
+
+        void hideTrailersLayout();
     }
 
     interface Presenter extends BasePresenter<MovieDetailContract.View> {
@@ -28,5 +40,9 @@ public interface MovieDetailContract {
         boolean getFavoritesValue();
 
         void checkIfMovieInFavorites();
+
+        void loadReviews();
+
+        void loadTrailers();
     }
 }

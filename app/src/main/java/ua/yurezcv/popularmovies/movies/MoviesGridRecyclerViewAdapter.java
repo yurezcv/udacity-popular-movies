@@ -1,7 +1,6 @@
 package ua.yurezcv.popularmovies.movies;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +9,20 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ua.yurezcv.popularmovies.R;
 import ua.yurezcv.popularmovies.data.model.Movie;
 import ua.yurezcv.popularmovies.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MoviesGridRecyclerViewAdapter extends RecyclerView.Adapter<MoviesGridRecyclerViewAdapter.MoviesViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
 
-    private List<Movie> mMoviesList;
+    private final List<Movie> mMoviesList;
 
-    private MoviesGridAdapterOnClickHandler mListener;
+    private final MoviesGridAdapterOnClickHandler mListener;
 
     /**
      * The interface that receives onClick messages.
@@ -77,27 +76,11 @@ public class MoviesGridRecyclerViewAdapter extends RecyclerView.Adapter<MoviesGr
         return mMoviesList.size();
     }
 
-    class MoviesViewHolder extends RecyclerView.ViewHolder {
-        final View mView;
-        final ImageView mPosterImageView;
-
-        MoviesViewHolder(View view) {
-            super(view);
-            mView = view;
-            mPosterImageView = view.findViewById(R.id.iv_movie_poster);
-        }
-
-    }
-
     public void setData(List<Movie> movieList) {
-        if(movieList != null) {
+        if (movieList != null) {
             mMoviesList.addAll(movieList);
         }
     }
-
-/*    public List<Movie> getData() {
-        return mMoviesList;
-    }*/
 
     /* Handle removing an item from the adapter */
     public void removeDataItem(int position) {
@@ -109,5 +92,17 @@ public class MoviesGridRecyclerViewAdapter extends RecyclerView.Adapter<MoviesGr
     public void clearData() {
         mMoviesList.clear();
         notifyDataSetChanged();
+    }
+
+    class MoviesViewHolder extends RecyclerView.ViewHolder {
+        final View mView;
+        final ImageView mPosterImageView;
+
+        MoviesViewHolder(View view) {
+            super(view);
+            mView = view;
+            mPosterImageView = view.findViewById(R.id.iv_movie_poster);
+        }
+
     }
 }

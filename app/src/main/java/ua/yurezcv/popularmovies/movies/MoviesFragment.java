@@ -3,7 +3,6 @@ package ua.yurezcv.popularmovies.movies;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -229,7 +227,7 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
             @Override
             public void run() {
                 mMoviesGridAdapter.setData(movies);
-                mMoviesGridAdapter.notifyItemRangeInserted(currentSize, movies.size() - 1);
+                mMoviesGridAdapter.notifyItemRangeInserted(currentSize, movies.size());
             }
         });
     }

@@ -1,5 +1,6 @@
 package ua.yurezcv.popularmovies.data.remote;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -15,7 +16,7 @@ import ua.yurezcv.popularmovies.data.model.TrailersResult;
 
 public class RemoteDataSource implements DataSourceContact {
 
-    private MoviesAPI mMoviesAPI;
+    private final MoviesAPI mMoviesAPI;
 
     public RemoteDataSource() {
         mMoviesAPI = RetrofitMoviesClient.getInstance().getMoviesApiService();
@@ -80,7 +81,17 @@ public class RemoteDataSource implements DataSourceContact {
                 List<Trailer> trailers = trailersResult.getTrailers();
 
                 if(trailers != null) {
-                    callback.onSuccess(trailers);
+
+                    List<Trailer> filteredTrailers = new ArrayList<>();
+                    // return only Trailers from Youtube to display
+                    for (Trailer trailer : trailers) {
+                        if(trailer.getSite().equals("YouTube")
+                                && trailer.getType().equals("Trailer")) {
+                            filteredTrailers.add(trailer);
+                        }
+                    }
+
+                    callback.onSuccess(filteredTrailers);
                 }
             }
 

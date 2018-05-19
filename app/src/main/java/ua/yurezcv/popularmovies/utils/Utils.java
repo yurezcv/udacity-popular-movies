@@ -1,13 +1,9 @@
 package ua.yurezcv.popularmovies.utils;
 
-import android.net.Uri;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import ua.yurezcv.popularmovies.data.local.MovieContract;
 
 public class Utils {
 
@@ -29,4 +25,9 @@ public class Utils {
         spf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         return spf.format(newDate);
     }
+
+    public static String makeYoutubeLink(String key) {
+        return "https://www.youtube.com/watch?v=" + key;
+    }
+
 }

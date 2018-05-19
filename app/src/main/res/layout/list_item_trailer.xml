@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingBottom="@dimen/list_item_margin"
+    android:paddingEnd="@dimen/list_item_margin"
+    android:paddingLeft="@dimen/list_item_margin"
+    android:paddingRight="@dimen/list_item_margin"
+    android:paddingStart="@dimen/list_item_margin"
+    android:paddingTop="@dimen/list_item_margin">
+
+    <ImageView
+        android:id="@+id/iv_trailer_icon"
+        android:layout_width="@dimen/list_icon"
+        android:layout_height="@dimen/list_icon"
+        android:contentDescription="@string/content_description_trailer_icon"
+        android:src="@drawable/ic_baseline_play_circle_outline"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_trailer_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/list_item_margin"
+        android:layout_marginLeft="@dimen/list_item_margin"
+        android:layout_marginRight="@dimen/list_item_margin"
+        android:layout_marginStart="@dimen/list_item_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Tooltip"
+        app:layout_constraintEnd_toStartOf="@+id/btn_share_trailer"
+        app:layout_constraintRight_toLeftOf="@id/btn_share_trailer"
+        app:layout_constraintStart_toEndOf="@id/iv_trailer_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="The Hobbit: The Battle of the Five Armies - Official Teaser Trailer [HD]" />
+
+    <TextView
+        android:id="@+id/tv_trailer_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/list_item_margin"
+        android:layout_marginStart="@dimen/list_item_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/listCaptionText"
+        android:textSize="@dimen/list_item_caption_text_size"
+        app:layout_constraintLeft_toRightOf="@id/iv_trailer_icon"
+        app:layout_constraintTop_toBottomOf="@id/tv_trailer_title"
+        tools:text="Teaser" />
+
+    <Button
+        android:id="@+id/btn_share_trailer"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/material_btn_height"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_baseline_share"
+        android:drawableStart="@drawable/ic_baseline_share"
+        android:paddingEnd="@dimen/material_btn_padding"
+        android:paddingLeft="@dimen/material_btn_padding"
+        android:paddingRight="@dimen/material_btn_padding"
+        android:paddingStart="@dimen/material_btn_padding"
+        android:drawablePadding="@dimen/material_btn_padding"
+        android:text="@string/string_share"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

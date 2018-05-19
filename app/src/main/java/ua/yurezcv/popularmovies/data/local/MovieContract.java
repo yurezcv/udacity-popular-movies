@@ -7,9 +7,9 @@ public class MovieContract {
 
     public static final String CONTENT_AUTHORITY = "ua.yurezcv.popularmovies";
 
-    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-
     public static final String PATH_MOVIE = "movie";
+
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final class MovieEntry implements BaseColumns {
 

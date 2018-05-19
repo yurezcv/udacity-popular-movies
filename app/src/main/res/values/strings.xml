@@ -13,4 +13,8 @@
     <string name="label_overview">Overview</string>
     <string name="menu_filter_favorites">Favorites</string>
     <string name="menu_add_to_favorites">Add To Favorites</string>
+    <string name="label_trailers">Trailers</string>
+    <string name="content_description_trailer_icon">Play Trailer Icon</string>
+    <string name="label_reviews">Reviews</string>
+    <string name="string_share">Share</string>
 </resources>
