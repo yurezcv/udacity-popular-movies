@@ -9,7 +9,7 @@ A movie app which fetches data from [The Movie DB](https://www.themoviedb.org/?l
 
 ### Other features
 
-* Show a detailed Activity with information, trailes and reviews about the selected movie;
+* Show a detailed Activity with information, trailers and reviews about the selected movie;
 * Add movies to favorites;
 * See a grid of favorite movies;
 * Watch trailers in a YouTube app (if installed) or in a web browser;
