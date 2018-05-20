@@ -3,6 +3,18 @@
 The Popular Movies project for Udacity Android Nanodegree.
 My attempt on developing the project by using Clean Architecture principles and patterns (MVP and Repository)
 
+## Project Description
+
+A movie app which fetches data from [The Movie DB](https://www.themoviedb.org/?language=en) and lets a user filter movies by most popular and highest rated categories.
+
+### Other features
+
+* Show a detailed Activity with information, trailes and reviews about the selected movie;
+* Add movies to favorites;
+* See a grid of favorite movies;
+* Watch trailers in a YouTube app (if installed) or in a web browser;
+* Share a movie trailer;
+
 ## Built With
 
 * [Picasso](https://square.github.io/picasso/) - A powerful image downloading and caching library for Android

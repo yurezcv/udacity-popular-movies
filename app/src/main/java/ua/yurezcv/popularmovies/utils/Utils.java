@@ -5,7 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Utils {
+public final class Utils {
+
+    // Suppress default constructor for the Utils class
+    private Utils() {
+        throw new AssertionError();
+    }
 
     private static final String BASE_IMG_URL = "http://image.tmdb.org/t/p/";
     private static final String POSTER_IMG_SIZE = "w185/";

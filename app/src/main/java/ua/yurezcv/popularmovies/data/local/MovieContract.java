@@ -3,7 +3,12 @@ package ua.yurezcv.popularmovies.data.local;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class MovieContract {
+public final class MovieContract {
+
+    // Suppress default constructor
+    private MovieContract() {
+        throw new AssertionError();
+    }
 
     public static final String CONTENT_AUTHORITY = "ua.yurezcv.popularmovies";
 
