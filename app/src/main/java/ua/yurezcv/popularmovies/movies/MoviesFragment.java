@@ -3,12 +3,15 @@ package ua.yurezcv.popularmovies.movies;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,11 +38,8 @@ import ua.yurezcv.popularmovies.utils.threading.DiskIOThreadExecutor;
  */
 public class MoviesFragment extends Fragment implements MoviesContract.View, MoviesGridRecyclerViewAdapter.MoviesGridAdapterOnClickHandler {
 
-    private static final String ARG_COLUMN_COUNT = "column-count";
-
     private static final String KEY_FILTER_STATE = "key-filter-state";
-
-    private int mColumnCount = 2;
+    private static final String KEY_RECYCLER_VIEW_STATE = "key-recycler-view-state";
 
     // UI elements
     private RecyclerView mMoviesGridRecycleView;
@@ -51,24 +51,14 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
     private MoviesGridRecyclerViewAdapter mMoviesGridAdapter;
     private EndlessRecyclerViewScrollListener mScrollListener;
 
-    public MoviesFragment() {
-    }
+    private Parcelable mRecyclerViewState;
 
-    public static MoviesFragment newInstance(int columnCount) {
-        MoviesFragment fragment = new MoviesFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+    public MoviesFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
 
         AppExecutors appExecutors = AppExecutors.getInstance(new DiskIOThreadExecutor(),
                 Executors.newFixedThreadPool(AppExecutors.THREAD_COUNT),
@@ -106,19 +96,14 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
 
         // init the recycler view and set the adapter
         Context context = view.getContext();
-        if (mColumnCount <= 1) {
-            mMoviesGridRecycleView.setLayoutManager(new LinearLayoutManager(context));
-        } else {
-            mMoviesGridRecycleView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-        }
+
+        mMoviesGridRecycleView.setLayoutManager(new GridLayoutManager(context, calcNumberOfColumns()));
 
         // init onScrollListener for pagination loading in the movies grid
         mScrollListener = new EndlessRecyclerViewScrollListener((GridLayoutManager) mMoviesGridRecycleView.getLayoutManager()) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // API page count starts from 1, EndlessRecyclerViewScrollListener counts from 0
-                // that's why we need to add +1 to the page value
-                mPresenter.loadMoviesFromPage(page+1);
+                mPresenter.loadMoviesFromPage(mMoviesGridAdapter.getNextLoadPage());
             }
         };
         // Adds the scroll listener to RecyclerView
@@ -195,6 +180,7 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
         super.onSaveInstanceState(outState);
         // save the last selected filter value
         outState.putInt(KEY_FILTER_STATE, mPresenter.onSaveFilterState());
+        outState.putParcelable(KEY_RECYCLER_VIEW_STATE, mMoviesGridRecycleView.getLayoutManager().onSaveInstanceState());
     }
 
     @Override
@@ -203,8 +189,10 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
         if(savedInstanceState != null) {
             // restore the last selected filter value
             mPresenter.onRestoreFilterState(savedInstanceState.getInt(KEY_FILTER_STATE));
+            mRecyclerViewState = savedInstanceState.getParcelable(KEY_RECYCLER_VIEW_STATE);
         }
     }
+
 
     @Override
     public void setProgressIndicator(boolean active) {
@@ -228,6 +216,12 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
             public void run() {
                 mMoviesGridAdapter.setData(movies);
                 mMoviesGridAdapter.notifyItemRangeInserted(currentSize, movies.size());
+
+                // restore recycler view state
+                if(mRecyclerViewState != null) {
+                    mMoviesGridRecycleView.getLayoutManager().onRestoreInstanceState(mRecyclerViewState);
+                    mRecyclerViewState = null;
+                }
             }
         });
     }
@@ -258,5 +252,16 @@ public class MoviesFragment extends Fragment implements MoviesContract.View, Mov
         mScrollListener.resetState();
         mMoviesGridAdapter.clearData();
         getActivity().invalidateOptionsMenu();
+    }
+
+    private int calcNumberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        // You can change this divider to adjust the size of the poster
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2; // to keep the grid aspect
+        return nColumns;
     }
 }

@@ -19,7 +19,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
     private final Context mContext;
 
-    private final List<Trailer> mTrailersList;
+    private final ArrayList<Trailer> mTrailersList;
 
     private final TrailersAdapterOnClickHandler mListener;
 
@@ -69,6 +69,10 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
         if (trailers != null) {
             mTrailersList.addAll(trailers);
         }
+    }
+
+    public ArrayList<Trailer> getAdapterData() {
+        return mTrailersList;
     }
 
     public boolean isAdapterEmpty() {

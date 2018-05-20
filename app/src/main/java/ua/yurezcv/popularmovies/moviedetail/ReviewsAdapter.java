@@ -18,7 +18,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
 
     private final Context mContext;
 
-    private final List<Review> mReviewsList;
+    private final ArrayList<Review> mReviewsList;
 
     ReviewsAdapter(Context context) {
         mContext = context;
@@ -49,6 +49,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
         if (reviews != null) {
             mReviewsList.addAll(reviews);
         }
+    }
+
+    public ArrayList<Review> getAdapterData() {
+        return mReviewsList;
     }
 
     public boolean isAdapterEmpty() {

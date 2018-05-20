@@ -214,4 +214,8 @@ public class DataRepository implements DataSourceContact {
     public void clearIsFavoritesUpdatedFlag() {
         mIsFavoritesUpdated = false;
     }
+
+    public List<Movie> getMoviesCache() {
+        return mMoviesCache;
+    }
 }

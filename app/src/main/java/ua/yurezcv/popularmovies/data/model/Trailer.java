@@ -1,8 +1,11 @@
 package ua.yurezcv.popularmovies.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Trailer {
+public class Trailer implements Parcelable {
 
     @SerializedName("id")
     private String id;
@@ -70,4 +73,41 @@ public class Trailer {
                 '}';
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.key);
+        dest.writeString(this.name);
+        dest.writeString(this.site);
+        dest.writeString(this.type);
+    }
+
+    public Trailer() {
+    }
+
+    protected Trailer(Parcel in) {
+        this.id = in.readString();
+        this.key = in.readString();
+        this.name = in.readString();
+        this.site = in.readString();
+        this.type = in.readString();
+    }
+
+    public static final Parcelable.Creator<Trailer> CREATOR = new Parcelable.Creator<Trailer>() {
+        @Override
+        public Trailer createFromParcel(Parcel source) {
+            return new Trailer(source);
+        }
+
+        @Override
+        public Trailer[] newArray(int size) {
+            return new Trailer[size];
+        }
+    };
 }

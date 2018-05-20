@@ -120,6 +120,11 @@ public class MovieDetailPresenter implements MovieDetailContract.Presenter {
     }
 
     @Override
+    public void onRestoreState() {
+
+    }
+
+    @Override
     public boolean getFavoritesValue() {
         return isInFavorites;
     }

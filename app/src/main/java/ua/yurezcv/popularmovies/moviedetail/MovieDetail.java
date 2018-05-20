@@ -3,6 +3,7 @@ package ua.yurezcv.popularmovies.moviedetail;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.ActionBar;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -34,6 +36,9 @@ import ua.yurezcv.popularmovies.utils.threading.AppExecutors;
 import ua.yurezcv.popularmovies.utils.threading.DiskIOThreadExecutor;
 
 public class MovieDetail extends AppCompatActivity implements MovieDetailContract.View {
+
+    private static final String KEY_TRAILERS = "key-trailers";
+    private static final String KEY_REVIEWS = "key-reviews";
 
     private MovieDetailContract.Presenter mPresenter;
 
@@ -95,7 +100,13 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
                 Executors.newFixedThreadPool(AppExecutors.THREAD_COUNT),
                 new AppExecutors.MainThreadExecutor());
 
-        mPresenter = new MovieDetailPresenter(DataRepository.getInstance(getApplicationContext(), appExecutors));
+        mPresenter = new MovieDetailPresenter(DataRepository.getInstance(getApplicationContext(),
+                appExecutors));
+
+        if(savedInstanceState != null) {
+            mReviewsAdapter.setAdapterData(savedInstanceState.<Review>getParcelableArrayList(KEY_REVIEWS));
+            mTrailersAdapter.setAdapterData(savedInstanceState.<Trailer>getParcelableArrayList(KEY_TRAILERS));
+        }
     }
 
     @Override
@@ -111,6 +122,19 @@ public class MovieDetail extends AppCompatActivity implements MovieDetailContrac
     protected void onPause() {
         mPresenter.dropView();
         super.onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(KEY_TRAILERS, mTrailersAdapter.getAdapterData());
+        outState.putParcelableArrayList(KEY_REVIEWS, mReviewsAdapter.getAdapterData());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
     }
 
     @Override

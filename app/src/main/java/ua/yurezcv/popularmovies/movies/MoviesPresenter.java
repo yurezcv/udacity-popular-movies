@@ -43,7 +43,7 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
         // load movies if it's on restore fragment state
         if(isOnRestoreState) {
-            loadMovies(mCurrentFilterSelection);
+            mView.showMovies(mDataRepository.getMoviesCache());
             isOnRestoreState = false;
         }
 

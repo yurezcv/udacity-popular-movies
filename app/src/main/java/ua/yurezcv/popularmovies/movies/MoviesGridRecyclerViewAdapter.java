@@ -94,6 +94,13 @@ public class MoviesGridRecyclerViewAdapter extends RecyclerView.Adapter<MoviesGr
         notifyDataSetChanged();
     }
 
+    // return current page, 20 items per page
+    // API page count starts from 1, EndlessRecyclerViewScrollListener counts from 0
+    // that's why we need to add +1 to the page value
+    public int getNextLoadPage() {
+        return getItemCount() / 20 + 1;
+    }
+
     class MoviesViewHolder extends RecyclerView.ViewHolder {
         final View mView;
         final ImageView mPosterImageView;

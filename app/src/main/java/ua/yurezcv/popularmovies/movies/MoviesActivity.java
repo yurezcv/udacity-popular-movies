@@ -22,7 +22,7 @@ public class MoviesActivity extends AppCompatActivity {
         // check if fragment exists, init otherwise
         if (moviesFragment == null) {
             // init the movies fragment with 2 columns
-            moviesFragment = MoviesFragment.newInstance(2);
+            moviesFragment = new MoviesFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.add(fragmentLayoutId, moviesFragment);

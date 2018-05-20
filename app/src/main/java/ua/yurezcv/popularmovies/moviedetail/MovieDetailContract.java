@@ -44,5 +44,7 @@ public interface MovieDetailContract {
         void loadReviews();
 
         void loadTrailers();
+
+        void onRestoreState();
     }
 }
